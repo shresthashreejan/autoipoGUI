@@ -1,10 +1,13 @@
-<script>
-	let currentRoute = '/';
-</script>
-
-<nav class="bg-white p-4">
-	<div class="container mx-auto flex justify-end gap-4">
-		<a href="/" class={currentRoute == '/' ? 'font-bold' : ''}>Home</a>
-		<a href="/settings" class={currentRoute == '/settings' ? 'font-bold' : ''}>Settings</a>
+<div class="navbar bg-base-100">
+	<div class="flex-1">
+		<a class="btn btn-ghost text-xl" href="/">Home</a>
 	</div>
-</nav>
+	<div class="flex-none">
+		<ul class="menu menu-horizontal px-1">
+			<li><a href="/results">IPO Results</a></li>
+			<li>
+				<a href="/settings">Settings</a>
+			</li>
+		</ul>
+	</div>
+</div>

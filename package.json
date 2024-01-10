@@ -33,6 +33,7 @@
   },
   "type": "module",
   "dependencies": {
+    "daisyui": "latest",
     "pocketbase": "^0.20.1"
   }
 }
