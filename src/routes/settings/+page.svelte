@@ -4,7 +4,7 @@
 	}
 </script>
 
-<div class="flex flex-col justify-center items-center">
-	<h1>Manage accounts</h1>
+<div class="h-screen flex flex-col justify-center items-center gap-4">
+	<h1>Settings</h1>
 	<button class="btn" onclick={addAccounts}>Add accounts</button>
 </div>

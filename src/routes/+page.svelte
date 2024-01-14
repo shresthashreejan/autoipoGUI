@@ -10,8 +10,9 @@
 	}
 </script>
 
-<div class="h-[80vh] flex flex-col justify-center items-center gap-4">
-	<div class="flex gap-4">
+<div class="h-screen flex flex-col justify-center items-center gap-4">
+	<h1>Apply IPO</h1>
+	<div class="flex gap-2">
 		<input
 			type="number"
 			placeholder="Enter amount of kitta"
@@ -21,7 +22,7 @@
 			class="tooltip flex justify-center items-center"
 			data-tip="Leave empty for minimum amount."
 		>
-			<span class="indicator-item badge bg-gray-400 text-black">i</span>
+			<span class=" bg-slate-600 w-6 rounded-full text-white">i</span>
 		</div>
 	</div>
 
