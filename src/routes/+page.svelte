@@ -1,11 +1,18 @@
 <script>
+	import { goto } from '$app/navigation';
 	export let data;
 
-	let kittaAmount;
-	function setKitta(event) {
-		let setAmount = event.target.parentElement.childNodes[2].value;
+	function navigateToSettings() {
+		goto('/settings');
+	}
+
+	let defaultAmount = 100;
+	let amount = defaultAmount;
+
+	function setAmount(event) {
+		let setAmount = document.querySelector('#set-amount').value;
 		if (setAmount) {
-			kittaAmount = parseInt(setAmount);
+			amount = parseInt(setAmount);
 		}
 	}
 </script>
@@ -17,6 +24,7 @@
 			type="number"
 			placeholder="Enter amount of kitta"
 			class="input input-bordered w-full max-w-xs"
+			id="set-amount"
 		/>
 		<div
 			class="tooltip flex justify-center items-center"
@@ -25,8 +33,14 @@
 			<span class=" bg-slate-600 w-6 rounded-full text-white">i</span>
 		</div>
 	</div>
-
-	<button class="btn" onclick={setKitta}>Apply</button>
+	{#if Object.keys(data).length === 0}
+		<h2>
+			Add accounts from <a href="/settings" class="font-bold">settings</a> to get started.
+		</h2>
+		<button class="btn" onclick={navigateToSettings}>Settings</button>
+	{:else}
+		<button class="btn" onclick={setAmount}>Apply</button>
+	{/if}
 </div>
 
 <style>
