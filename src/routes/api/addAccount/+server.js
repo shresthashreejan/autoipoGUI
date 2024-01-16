@@ -34,7 +34,8 @@ export const POST = async (event) => {
 			)
 			.run();
 
-		let rows = db.query('SELECT * FROM accounts').all();
+		let rows = await db.query('SELECT * FROM accounts').all();
+		db.close();
 		console.log(rows);
 
 		return new Response(JSON.stringify({ success: true }), {

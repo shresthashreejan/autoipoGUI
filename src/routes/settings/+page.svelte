@@ -4,25 +4,61 @@
 	}
 
 	async function addAccount(event) {
-		const form = event.target;
-		const data = new FormData(form);
+		event.preventDefault();
+		try {
+			const form = event.target;
+			const data = new FormData(form);
 
-		let response = await fetch('/api/addAccount', {
-			method: 'POST',
-			body: data
+			let response = await fetch('/api/addAccount', {
+				method: 'POST',
+				body: data
+			});
+
+			if (!response.ok) {
+				throw new Error('Failed to add account');
+			}
+
+			const responseData = await response.json();
+			console.log(responseData);
+
+			document.querySelector('#add-accounts-modal').close();
+		} catch (error) {
+			console.error('Error fetching accounts:', error);
+			console.error(error.stack);
+		}
+	}
+
+	let fetchedAccounts;
+	async function fetchAccounts() {
+		try {
+			const response = await fetch('/api/fetchAccounts');
+			const data = await response.json();
+			fetchedAccounts = data;
+		} catch (error) {
+			console.error('Error fetching accounts:', error);
+		}
+	}
+
+	function openTempModal() {
+		fetchAccounts().then(() => {
+			document.querySelector('#temp-modal').showModal();
 		});
 	}
-
-	async function fetchAccounts() {
-		let response = await fetch('/api/fetchAccounts');
-		console.log('RESPONSE: ' + response);
-	}
 </script>
+
+<dialog id="temp-modal" class="modal">
+	<div class="modal-box w-auto">
+		<form method="dialog">
+			<button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+		</form>
+		<h1>{JSON.stringify(fetchedAccounts)}</h1>
+	</div>
+</dialog>
 
 <div class="h-screen flex flex-col justify-center items-center gap-4">
 	<h1>Settings</h1>
 	<button class="btn" onclick={openModal}>Add accounts</button>
-	<button class="btn" onclick={fetchAccounts}>View accounts</button>
+	<button class="btn" onclick={openTempModal}>View accounts</button>
 </div>
 
 <dialog id="add-accounts-modal" class="modal">
