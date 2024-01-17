@@ -1,8 +1,8 @@
 import { Database } from 'bun:sqlite';
 
-export const POST = async (event) => {
+export const POST = async ({ request }) => {
 	try {
-		const data = await event.request.formData();
+		const data = await request.formData();
 		const username = data.get('username');
 		const password = data.get('password');
 		const client_id = data.get('client_id');
@@ -16,15 +16,15 @@ export const POST = async (event) => {
 		await db
 			.query(
 				`CREATE TABLE IF NOT EXISTS accounts (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                username TEXT,
-                password TEXT,
-                client_id INTEGER,
-                demat_no TEXT,
-                crn TEXT,
-                boid INTEGER,
-                dp INTEGER
-            )`
+					id INTEGER PRIMARY KEY AUTOINCREMENT,
+					username TEXT,
+					password TEXT,
+					client_id INTEGER,
+					demat_no TEXT,
+					crn TEXT,
+					boid INTEGER,
+					dp INTEGER
+				)`
 			)
 			.run();
 
@@ -38,13 +38,17 @@ export const POST = async (event) => {
 		db.close();
 		console.log(rows);
 
-		return new Response(JSON.stringify({ success: true }), {
-			headers: {
-				'Content-Type': 'application/json'
-			}
+		const response = {
+			status: 'success',
+			data: rows
+		};
+
+		const responseBody = JSON.stringify(response);
+
+		return new Response(responseBody, {
+			headers: { 'Content-Type': 'application/json' }
 		});
 	} catch (error) {
-		console.error(error);
 		return new Response(JSON.stringify({ error: 'An error occurred. Error: ', error }), {
 			status: 500,
 			headers: {

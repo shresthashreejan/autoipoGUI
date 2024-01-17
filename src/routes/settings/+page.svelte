@@ -3,16 +3,23 @@
 		document.querySelector('#add-accounts-modal').showModal();
 	}
 
+	let iteratorCount = 0;
 	async function addAccount(event) {
 		event.preventDefault();
 		try {
 			const form = event.target;
-			const data = new FormData(form);
+			const data = await new FormData(form);
 
-			let response = await fetch('/api/addAccount', {
-				method: 'POST',
-				body: data
-			});
+			let response;
+			if (data) {
+				response = await Promise.race([
+					fetch('/api/addAccount', {
+						method: 'POST',
+						body: data
+					}),
+					new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout')), 3000))
+				]);
+			}
 
 			if (!response.ok) {
 				throw new Error('Failed to add account');
@@ -20,11 +27,15 @@
 
 			const responseData = await response.json();
 			console.log(responseData);
+			iteratorCount = 0;
 
 			document.querySelector('#add-accounts-modal').close();
 		} catch (error) {
+			iteratorCount++;
+			if (iteratorCount < 3) {
+				addAccount(event);
+			}
 			console.error('Error fetching accounts:', error);
-			console.error(error.stack);
 		}
 	}
 
@@ -68,7 +79,7 @@
 		</form>
 		<h2 class="text-2xl font-bold mb-4">Add accounts</h2>
 
-		<form onsubmit={addAccount}>
+		<form on:submit={addAccount} method="POST">
 			<div class="mb-4">
 				<label for="username" class="block text-sm font-medium text-gray-600">Username</label>
 				<input
