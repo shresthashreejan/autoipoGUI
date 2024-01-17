@@ -5,6 +5,7 @@ export const GET = async () => {
 
 	try {
 		let rows = await db.query('SELECT * FROM accounts').all();
+		db.close();
 		const response = {
 			status: 'success',
 			data: rows

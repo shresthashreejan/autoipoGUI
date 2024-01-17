@@ -5,7 +5,7 @@
 	import cogOutline from '@iconify/icons-mdi/cog-outline';
 </script>
 
-<div class="fixed top-0 left-0 h-screen w-16 flex flex-col justify-center mx-4">
+<div class="fixed top-0 left-0 h-screen w-16 flex flex-col justify-center mx-4 z-50">
 	<nav>
 		<ul>
 			<a href="/"

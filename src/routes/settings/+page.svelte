@@ -1,4 +1,6 @@
 <script>
+	import Table from '$lib/table/table.svelte';
+
 	function openModal() {
 		document.querySelector('#add-accounts-modal').showModal();
 	}
@@ -17,7 +19,7 @@
 						method: 'POST',
 						body: data
 					}),
-					new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout')), 3000))
+					new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout')), 1000))
 				]);
 			}
 
@@ -35,41 +37,47 @@
 			if (iteratorCount < 3) {
 				addAccount(event);
 			}
-			console.error('Error fetching accounts:', error);
+			console.error('Error adding account:', error);
 		}
 	}
 
 	let fetchedAccounts;
 	async function fetchAccounts() {
 		try {
-			const response = await fetch('/api/fetchAccounts');
+			const response = await fetch('/api/fetchAccounts', {
+				method: 'GET'
+			});
 			const data = await response.json();
-			fetchedAccounts = data;
+			fetchedAccounts = data.data;
 		} catch (error) {
 			console.error('Error fetching accounts:', error);
 		}
 	}
 
-	function openTempModal() {
+	function openAccountsModal() {
 		fetchAccounts().then(() => {
-			document.querySelector('#temp-modal').showModal();
+			document.querySelector('#view-accounts-modal').showModal();
 		});
+	}
+
+	async function clearAllAccounts() {
+		try {
+			await fetch('/api/clearAllAccounts', {
+				method: 'DELETE'
+			});
+		} catch (error) {
+			console.error('Error deleting all accounts:', error);
+		}
 	}
 </script>
 
-<dialog id="temp-modal" class="modal">
-	<div class="modal-box w-auto">
-		<form method="dialog">
-			<button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
-		</form>
-		<h1>{JSON.stringify(fetchedAccounts)}</h1>
-	</div>
-</dialog>
-
 <div class="h-screen flex flex-col justify-center items-center gap-4">
 	<h1>Settings</h1>
-	<button class="btn" onclick={openModal}>Add accounts</button>
-	<button class="btn" onclick={openTempModal}>View accounts</button>
+	<div class="flex gap-4">
+		<button class="btn" onclick={openModal}>Add accounts</button>
+		<button class="btn" onclick={openAccountsModal}>View accounts</button>
+		<button class="btn" onclick={clearAllAccounts}>Clear all accounts</button>
+	</div>
 </div>
 
 <dialog id="add-accounts-modal" class="modal">
@@ -79,7 +87,7 @@
 		</form>
 		<h2 class="text-2xl font-bold mb-4">Add accounts</h2>
 
-		<form on:submit={addAccount} method="POST">
+		<form onsubmit={addAccount} method="POST">
 			<div class="mb-4">
 				<label for="username" class="block text-sm font-medium text-gray-600">Username</label>
 				<input
@@ -142,6 +150,19 @@
 			</div>
 			<button type="submit" class="btn">Save</button>
 		</form>
+	</div>
+</dialog>
+
+<dialog id="view-accounts-modal" class="modal">
+	<div class="modal-box max-w-[80vw]">
+		<form method="dialog">
+			<button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+		</form>
+		<div class="flex justify-center">
+			<h2 class="text-2xl font-bold mb-4">Saved accounts</h2>
+		</div>
+
+		<Table {fetchedAccounts} />
 	</div>
 </dialog>
 
