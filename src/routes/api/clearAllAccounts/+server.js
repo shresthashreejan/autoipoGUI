@@ -10,7 +10,7 @@ export const DELETE = async () => {
 		};
 
 		const responseBody = JSON.stringify(response);
-		console.log(responseBody);
+
 		return new Response(responseBody, {
 			headers: { 'Content-Type': 'application/json' }
 		});

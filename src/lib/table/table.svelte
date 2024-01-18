@@ -25,38 +25,55 @@
 		}
 	}
 
+	function filterSelectedAccount(id) {
+		if (fetchedAccounts) {
+			fetchedAccounts = fetchedAccounts.filter((account) => account.id === parseInt(id));
+		}
+	}
+
+	let iteratorCount = 0;
+	async function editAccount(event) {
+		event.preventDefault();
+		try {
+			const form = event.target;
+			const id = form.id;
+			const data = await new FormData(form);
+			data.append('id', id);
+			let response;
+			if (data) {
+				response = await await Promise.race([
+					fetch('/api/editAccount', {
+						method: 'PUT',
+						body: data
+					}),
+					new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout')), 1000))
+				]);
+			}
+
+			if (!response.ok) {
+				throw new Error('Failed to edit account');
+			}
+
+			iteratorCount = 0;
+
+			document.querySelector('#edit-account-modal').close();
+			document.querySelector('#view-accounts-modal').close();
+		} catch (error) {
+			iteratorCount++;
+
+			if (iteratorCount < 3) {
+				editAccount(event);
+			}
+
+			console.error('Error editing account:', error);
+		}
+	}
+
 	function openEditModal(event) {
 		const id = event.target.id;
 		filterSelectedAccount(id);
 		document.querySelector('#edit-account-modal').showModal();
 	}
-
-	let selectedRowData = [];
-	function filterSelectedAccount(id) {
-		if (fetchedAccounts) {
-			selectedRowData = fetchedAccounts.filter((account) => account.id === parseInt(id));
-		}
-	}
-
-	// async function editAccount(event) {
-	// 	try {
-	// 		const id = event.target.id;
-	// 		let response;
-	// 		if (id) {
-	// 			response = await fetch(`/api/editAccount`, {
-	// 				method: 'PUT'
-	// 			});
-	// 		}
-
-	// 		if (!response.ok) {
-	// 			throw new Error('Failed to edit account');
-	// 		}
-
-	// 		document.querySelector('#edit-account-modal').close();
-	// 	} catch (error) {
-	// 		console.error('Error editing account:', error);
-	// 	}
-	// }
 </script>
 
 <div class="overflow-x-auto">
@@ -108,17 +125,15 @@
 		</form>
 		<h2 class="text-2xl font-bold mb-4">Edit account</h2>
 
-		<form onsubmit={editAccount} method="POST">
-			<!-- selectedRowData doesn't work, need to figure out it's data structure -->
-			{#if selectedRowData}
+		{#if fetchedAccounts}
+			<form onsubmit={editAccount} method="PUT" id={fetchedAccounts[0].id}>
 				<div class="mb-4">
 					<label for="username" class="block text-sm font-medium text-gray-600">Username</label>
 					<input
 						type="text"
-						id="username"
 						name="username"
 						class="mt-1 p-2 w-full border rounded-md"
-						value={selectedRowData.username}
+						value={fetchedAccounts[0].username}
 						required
 					/>
 				</div>
@@ -126,10 +141,9 @@
 					<label for="password" class="block text-sm font-medium text-gray-600">Password</label>
 					<input
 						type="password"
-						id="password"
 						name="password"
 						class="mt-1 p-2 w-full border rounded-md"
-						value={selectedRowData.password}
+						value={fetchedAccounts[0].password}
 						required
 					/>
 				</div>
@@ -137,10 +151,9 @@
 					<label for="client_id" class="block text-sm font-medium text-gray-600">Client ID</label>
 					<input
 						type="number"
-						id="client_id"
 						name="client_id"
 						class="mt-1 p-2 w-full border rounded-md"
-						value={selectedRowData.client_id}
+						value={fetchedAccounts[0].client_id}
 						required
 					/>
 				</div>
@@ -148,10 +161,9 @@
 					<label for="demat_no" class="block text-sm font-medium text-gray-600">Demat No.</label>
 					<input
 						type="text"
-						id="demat_no"
 						name="demat_no"
 						class="mt-1 p-2 w-full border rounded-md"
-						value={selectedRowData.demat_no}
+						value={fetchedAccounts[0].demat_no}
 						required
 					/>
 				</div>
@@ -159,10 +171,9 @@
 					<label for="crn" class="block text-sm font-medium text-gray-600">CRN</label>
 					<input
 						type="text"
-						id="crn"
 						name="crn"
 						class="mt-1 p-2 w-full border rounded-md"
-						value={selectedRowData.crn}
+						value={fetchedAccounts[0].crn}
 						required
 					/>
 				</div>
@@ -170,10 +181,9 @@
 					<label for="boid" class="block text-sm font-medium text-gray-600">BOID</label>
 					<input
 						type="number"
-						id="boid"
 						name="boid"
 						class="mt-1 p-2 w-full border rounded-md"
-						value={selectedRowData.boid}
+						value={fetchedAccounts[0].boid}
 						required
 					/>
 				</div>
@@ -183,16 +193,15 @@
 					>
 					<input
 						type="number"
-						id="dp"
 						name="dp"
 						class="mt-1 p-2 w-full border rounded-md"
-						value={selectedRowData.dp}
+						value={fetchedAccounts[0].dp}
 						required
 					/>
 				</div>
 				<button type="submit" class="btn">Save</button>
-			{/if}
-		</form>
+			</form>
+		{/if}
 	</div>
 </dialog>
 

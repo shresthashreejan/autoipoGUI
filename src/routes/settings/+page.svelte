@@ -28,15 +28,17 @@
 			}
 
 			const responseData = await response.json();
-			console.log(responseData);
+
 			iteratorCount = 0;
 
 			document.querySelector('#add-accounts-modal').close();
 		} catch (error) {
 			iteratorCount++;
+
 			if (iteratorCount < 3) {
 				addAccount(event);
 			}
+
 			console.error('Error adding account:', error);
 		}
 	}
