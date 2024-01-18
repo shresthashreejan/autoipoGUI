@@ -1,11 +1,9 @@
 <script>
 	import Table from '$lib/table/table.svelte';
 
-	function openModal() {
-		document.querySelector('#add-accounts-modal').showModal();
-	}
-
+	let fetchedAccounts;
 	let iteratorCount = 0;
+
 	async function addAccount(event) {
 		event.preventDefault();
 		try {
@@ -30,11 +28,9 @@
 			const responseData = await response.json();
 
 			iteratorCount = 0;
-
 			document.querySelector('#add-accounts-modal').close();
 		} catch (error) {
 			iteratorCount++;
-
 			if (iteratorCount < 3) {
 				addAccount(event);
 			}
@@ -43,7 +39,12 @@
 		}
 	}
 
-	let fetchedAccounts;
+	function openViewAccModal() {
+		fetchAccounts().then(() => {
+			document.querySelector('#view-accounts-modal').showModal();
+		});
+	}
+
 	async function fetchAccounts() {
 		try {
 			const response = await fetch('/api/fetchAccounts', {
@@ -56,12 +57,6 @@
 		}
 	}
 
-	function openAccountsModal() {
-		fetchAccounts().then(() => {
-			document.querySelector('#view-accounts-modal').showModal();
-		});
-	}
-
 	async function clearAllAccounts() {
 		try {
 			await fetch('/api/clearAllAccounts', {
@@ -71,13 +66,17 @@
 			console.error('Error deleting all accounts:', error);
 		}
 	}
+
+	function openAddAccModal() {
+		document.querySelector('#add-accounts-modal').showModal();
+	}
 </script>
 
 <div class="h-screen flex flex-col justify-center items-center gap-4">
 	<h1>Settings</h1>
 	<div class="flex gap-4">
-		<button class="btn" onclick={openModal}>Add accounts</button>
-		<button class="btn" onclick={openAccountsModal}>View accounts</button>
+		<button class="btn" onclick={openAddAccModal}>Add accounts</button>
+		<button class="btn" onclick={openViewAccModal}>View accounts</button>
 		<button class="btn" onclick={clearAllAccounts}>Clear all accounts</button>
 	</div>
 </div>

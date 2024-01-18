@@ -5,10 +5,13 @@
 
 	export let fetchedAccounts;
 
+	let iteratorCount = 0;
+
 	async function deleteAccount(event) {
 		try {
-			const id = event.target.id;
 			let response;
+			const id = event.target.id;
+
 			if (id) {
 				response = await fetch(`/api/deleteAccount/${id}`, {
 					method: 'DELETE'
@@ -31,15 +34,14 @@
 		}
 	}
 
-	let iteratorCount = 0;
 	async function editAccount(event) {
 		event.preventDefault();
 		try {
+			let response;
 			const form = event.target;
 			const id = form.id;
 			const data = await new FormData(form);
 			data.append('id', id);
-			let response;
 			if (data) {
 				response = await await Promise.race([
 					fetch('/api/editAccount', {
@@ -55,12 +57,10 @@
 			}
 
 			iteratorCount = 0;
-
 			document.querySelector('#edit-account-modal').close();
 			document.querySelector('#view-accounts-modal').close();
 		} catch (error) {
 			iteratorCount++;
-
 			if (iteratorCount < 3) {
 				editAccount(event);
 			}
