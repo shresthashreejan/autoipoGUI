@@ -1,18 +1,49 @@
 <script>
 	import { goto } from '$app/navigation';
+	import { onMount } from 'svelte';
+
 	export let data;
+	let fetchedAccounts;
+	let defaultAmount = 10;
+	let amount = defaultAmount;
+
+	onMount(async () => {
+		try {
+			const response = await fetch('/api/fetchAccounts', {
+				method: 'GET'
+			});
+			const data = await response.json();
+			if (data.data.length !== 0) {
+				fetchedAccounts = data.data;
+			}
+		} catch (error) {
+			console.error('Error fetching accounts:', error);
+		}
+	});
 
 	function navigateToSettings() {
 		goto('/settings');
 	}
 
-	let defaultAmount = 100;
-	let amount = defaultAmount;
-
 	function setAmount(event) {
 		let setAmount = document.querySelector('#set-amount').value;
 		if (setAmount) {
 			amount = parseInt(setAmount);
+		}
+		screenshot();
+	}
+
+	async function screenshot() {
+		try {
+			const response = await fetch('/api/apply', {
+				method: 'GET'
+			});
+			const data = await response.json();
+			if (response.ok) {
+				console.log('Screenshot saved.');
+			}
+		} catch (error) {
+			console.error('Error ', error);
 		}
 	}
 </script>
@@ -33,7 +64,7 @@
 			<span class=" bg-slate-600 w-6 rounded-full text-white">i</span>
 		</div>
 	</div>
-	{#if Object.keys(data).length === 0}
+	{#if !fetchedAccounts}
 		<h2>
 			Add accounts from <a href="/settings" class="font-bold">settings</a> to get started.
 		</h2>

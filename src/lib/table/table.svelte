@@ -58,7 +58,6 @@
 
 			iteratorCount = 0;
 			document.querySelector('#edit-account-modal').close();
-			document.querySelector('#view-accounts-modal').close();
 		} catch (error) {
 			iteratorCount++;
 			if (iteratorCount < 3) {
@@ -70,6 +69,7 @@
 	}
 
 	function openEditModal(event) {
+		document.querySelector('#view-accounts-modal').close();
 		const id = event.target.id;
 		filterSelectedAccount(id);
 		document.querySelector('#edit-account-modal').showModal();
@@ -77,7 +77,7 @@
 </script>
 
 <div class="overflow-x-auto">
-	<table class="table table-zebra">
+	<table class="table">
 		<thead>
 			<tr>
 				<th>ID</th>
@@ -93,7 +93,7 @@
 		</thead>
 		<tbody>
 			{#each fetchedAccounts as account}
-				<tr
+				<tr class="hover:bg-gray-50 transition-all"
 					><td>{account.id}</td>
 					<td>{account.username}</td>
 					<td>{account.password}</td>
@@ -104,12 +104,16 @@
 					<td>{account.dp}</td>
 					<td
 						><span class="gap-2">
-							<button class="btn btn-square" onclick={openEditModal} id={account.id}>
-								<Icon icon={creditCardEditOutline} height="25" id={account.id} />
-							</button>
-							<button class="btn btn-square" onclick={deleteAccount} id={account.id}>
-								<Icon icon={deleteOutline} height="25" id={account.id} />
-							</button></span
+							<li class="tooltip my-6" data-tip="Edit account">
+								<button class="btn btn-square" onclick={openEditModal} id={account.id}>
+									<Icon icon={creditCardEditOutline} height="25" id={account.id} />
+								</button>
+							</li>
+							<li class="tooltip my-6" data-tip="Delete account">
+								<button class="btn btn-square" onclick={deleteAccount} id={account.id}>
+									<Icon icon={deleteOutline} height="25" id={account.id} />
+								</button>
+							</li></span
 						></td
 					>
 				</tr>
