@@ -6,6 +6,7 @@
 	let fetchedAccounts;
 	let defaultAmount = 10;
 	let amount = defaultAmount;
+	let iteratorCount = 0;
 
 	onMount(async () => {
 		try {
@@ -35,14 +36,25 @@
 
 	async function screenshot() {
 		try {
-			const response = await fetch('/api/apply', {
-				method: 'GET'
-			});
-			const data = await response.json();
-			if (response.ok) {
-				console.log('Screenshot saved.');
+			const response = await Promise.race([
+				fetch('/api/apply', {
+					method: 'POST',
+					body: JSON.stringify({ fetchedAccounts })
+				}),
+				new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout')), 1000))
+			]);
+
+			if (!response.ok) {
+				throw new Error('Failed to apply');
 			}
+
+			const responseData = await response.json();
+			iteratorCount = 0;
 		} catch (error) {
+			iteratorCount++;
+			if (iteratorCount < 3) {
+				screenshot();
+			}
 			console.error('Error ', error);
 		}
 	}
