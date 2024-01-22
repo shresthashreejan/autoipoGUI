@@ -1,12 +1,16 @@
 <script>
 	import { goto } from '$app/navigation';
 	import { onMount } from 'svelte';
+	import Toast from '$lib/toast/toast.svelte';
 
 	export let data;
 	let fetchedAccounts;
 	let defaultAmount = 10;
 	let amount = defaultAmount;
 	let iteratorCount = 0;
+	let showToast = false;
+	let toastType;
+	let toastMessage;
 
 	onMount(async () => {
 		try {
@@ -48,15 +52,48 @@
 				throw new Error('Failed to apply');
 			}
 
-			const responseData = await response.json();
 			iteratorCount = 0;
+			showToastMessage('screenshot', 'success');
 		} catch (error) {
 			iteratorCount++;
 			if (iteratorCount < 3) {
 				screenshot();
+			} else {
+				showToastMessage('screenshot', 'error');
 			}
 			console.error('Error ', error);
 		}
+	}
+
+	function showToastMessage(message, type) {
+		if (type == 'success') {
+			toastType = 'success';
+			switch (message) {
+				case 'screenshot':
+					toastMessage = 'Success';
+					showToastEvent();
+					break;
+				default:
+					break;
+			}
+		} else {
+			toastType = 'error';
+			switch (message) {
+				case 'screenshot':
+					toastMessage = 'Error';
+					showToastEvent();
+					break;
+				default:
+					break;
+			}
+		}
+	}
+
+	function showToastEvent() {
+		showToast = true;
+		setTimeout(() => {
+			showToast = false;
+		}, 5000);
 	}
 </script>
 
@@ -85,6 +122,10 @@
 		<button class="btn" onclick={setAmount}>Apply</button>
 	{/if}
 </div>
+
+{#if showToast == true}
+	<Toast {toastType} {toastMessage} />
+{/if}
 
 <style>
 	/* For WebKit browsers (Chrome, Safari) */

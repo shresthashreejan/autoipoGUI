@@ -30,9 +30,9 @@ export const POST = async ({ request }) => {
 
 		await db
 			.query(
-				`INSERT INTO accounts (username, password, client_id, demat_no, crn, boid, dp) VALUES (${username}, ${password}, ${client_id}, ${demat_no}, ${crn}, ${boid}, ${dp})`
+				`INSERT INTO accounts (username, password, client_id, demat_no, crn, boid, dp) VALUES (?, ?, ?, ?, ?, ?, ?)`
 			)
-			.run();
+			.run(username, password, client_id, demat_no, crn, boid, dp);
 
 		let rows = await db.query('SELECT * FROM accounts').all();
 		db.close();
@@ -49,7 +49,7 @@ export const POST = async ({ request }) => {
 			headers: { 'Content-Type': 'application/json' }
 		});
 	} catch (error) {
-		return new Response(JSON.stringify({ error: 'An error occurred. Error: ', error }), {
+				return new Response(JSON.stringify({ error: 'An error occurred. Error: ', error }), {
 			status: 500,
 			headers: {
 				'Content-Type': 'application/json'

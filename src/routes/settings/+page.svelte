@@ -1,8 +1,12 @@
 <script>
 	import Table from '$lib/table/table.svelte';
+	import Toast from '$lib/toast/toast.svelte';
 
 	let fetchedAccounts;
 	let iteratorCount = 0;
+	let showToast = false;
+	let toastType;
+	let toastMessage;
 
 	async function addAccount(event) {
 		event.preventDefault();
@@ -25,24 +29,18 @@
 				throw new Error('Failed to add account');
 			}
 
-			const responseData = await response.json();
-
 			iteratorCount = 0;
 			document.querySelector('#add-accounts-modal').close();
+			showToastMessage('addAccount', 'success');
 		} catch (error) {
 			iteratorCount++;
 			if (iteratorCount < 3) {
 				addAccount(event);
+			} else {
+				showToastMessage('addAccount', 'error');
 			}
-
 			console.error('Error adding account:', error);
 		}
-	}
-
-	function openViewAccModal() {
-		fetchAccounts().then(() => {
-			document.querySelector('#view-accounts-modal').showModal();
-		});
 	}
 
 	async function fetchAccounts() {
@@ -52,7 +50,9 @@
 			});
 			const data = await response.json();
 			fetchedAccounts = data.data;
+			showToastMessage('fetchAccounts', 'success');
 		} catch (error) {
+			showToastMessage('fetchAccounts', 'error');
 			console.error('Error fetching accounts:', error);
 		}
 	}
@@ -62,13 +62,68 @@
 			await fetch('/api/clearAllAccounts', {
 				method: 'DELETE'
 			});
+			showToastMessage('clearAllAccounts', 'success');
 		} catch (error) {
+			showToastMessage('clearAllAccounts', 'error');
 			console.error('Error deleting all accounts:', error);
 		}
 	}
 
 	function openAddAccModal() {
 		document.querySelector('#add-accounts-modal').showModal();
+	}
+
+	function openViewAccModal() {
+		fetchAccounts().then(() => {
+			document.querySelector('#view-accounts-modal').showModal();
+		});
+	}
+
+	function showToastMessage(message, type) {
+		if (type == 'success') {
+			toastType = 'success';
+			switch (message) {
+				case 'clearAllAccounts':
+					toastMessage = 'Cleared all accounts.';
+					showToastEvent();
+					break;
+				case 'fetchAccounts':
+					toastMessage = 'Fetched all accounts.';
+					showToastEvent();
+					break;
+				case 'addAccount':
+					toastMessage = 'Account saved.';
+					showToastEvent();
+					break;
+				default:
+					break;
+			}
+		} else {
+			toastType = 'error';
+			switch (message) {
+				case 'clearAllAccounts':
+					toastMessage = 'Error clearing all accounts.';
+					showToastEvent();
+					break;
+				case 'fetchAccounts':
+					toastMessage = 'Error fetching all accounts.';
+					showToastEvent();
+					break;
+				case 'addAccount':
+					toastMessage = 'Error saving account.';
+					showToastEvent();
+					break;
+				default:
+					break;
+			}
+		}
+	}
+
+	function showToastEvent() {
+		showToast = true;
+		setTimeout(() => {
+			showToast = false;
+		}, 5000);
 	}
 </script>
 
@@ -166,6 +221,10 @@
 		<Table {fetchedAccounts} />
 	</div>
 </dialog>
+
+{#if showToast == true}
+	<Toast {toastType} {toastMessage} />
+{/if}
 
 <style>
 	/* For WebKit browsers (Chrome, Safari) */

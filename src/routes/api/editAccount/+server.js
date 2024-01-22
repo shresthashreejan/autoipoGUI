@@ -16,9 +16,9 @@ export const PUT = async ({ request }) => {
 
 		await db
 			.query(
-				`UPDATE accounts SET username = ${username}, password = ${password}, client_id = ${client_id}, demat_no = ${demat_no}, crn = ${crn}, boid = ${boid}, dp = ${dp} WHERE id = ${id}`
+				`UPDATE accounts SET username = (?), password = (?), client_id = (?), demat_no = (?), crn = (?), boid = (?), dp = (?) WHERE id = (?)`
 			)
-			.run();
+			.run(username, password, client_id, demat_no, crn, boid, dp, id);
 
 		const response = {
 			status: 'success',

@@ -5,7 +5,7 @@ export async function DELETE(RequestEvent) {
 	const id = parseInt(params.slug);
 	const db = new Database('accounts.sqlite');
 	try {
-		await db.query(`DELETE FROM accounts WHERE id = ${id}`).run();
+		await db.query(`DELETE FROM accounts WHERE id = (?)`).run(id);
 		db.close();
 
 		const response = {

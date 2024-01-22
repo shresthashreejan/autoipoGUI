@@ -21,7 +21,7 @@ export const POST = async ({ request }) => {
 			headers: { 'Content-Type': 'application/json' }
 		});
 	} catch (error) {
-		return new Response(JSON.stringify({ status: 'error', message: error }), {
+				return new Response(JSON.stringify({ status: 'error', message: error }), {
 			headers: { 'Content-Type': 'application/json' },
 			status: 500
 		});
@@ -39,6 +39,12 @@ const login = async (account) => {
 	await page.goto('https://meroshare.cdsc.com.np/#/login');
 	await page.waitForSelector('.forget-password');
 
+	const selectDp = await page.$('.select2-selection__placeholder');
+	if (selectDp) {
+		await selectDp.click();
+		await selectDp.type(account.dp.toString());
+	}
+
 	const username = await page.$('#username');
 	if (username) {
 		await username.click();
@@ -51,10 +57,15 @@ const login = async (account) => {
 		await password.type(account.password);
 	}
 
-	const selectDp = await page.$('.select2-selection__placeholder');
-	if (selectDp) {
-		await selectDp.click();
-		await selectDp.type(account.dp.toString());
+	const signIn = await page.$('.btn.sign-in');
+	if (signIn) {
+		await signIn.click();
+	}
+
+	await page.waitForSelector('.msi-asba');
+	const asba = await page.$('.msi-asba');
+	if (asba) {
+		await asba.click();
 	}
 
 	await page.screenshot({ path: `${account.username}_debug.png` });
