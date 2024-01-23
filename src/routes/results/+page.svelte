@@ -8,7 +8,6 @@
 	let results = false;
 
 	function checkResults() {
-		console.log('checkResults');
 		results = true;
 	}
 </script>

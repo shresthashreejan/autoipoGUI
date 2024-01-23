@@ -11,7 +11,6 @@ export async function DELETE(RequestEvent) {
 		const response = {
 			status: 'success'
 		};
-
 		const responseBody = JSON.stringify(response);
 
 		return new Response(responseBody, {
@@ -24,5 +23,7 @@ export async function DELETE(RequestEvent) {
 				'Content-Type': 'application/json'
 			}
 		});
+	} finally {
+		await db.close();
 	}
 }

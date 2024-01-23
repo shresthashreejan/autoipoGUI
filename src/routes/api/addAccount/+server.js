@@ -36,24 +36,24 @@ export const POST = async ({ request }) => {
 
 		let rows = await db.query('SELECT * FROM accounts').all();
 		db.close();
-		console.log(rows);
 
 		const response = {
 			status: 'success',
 			data: rows
 		};
-
 		const responseBody = JSON.stringify(response);
 
 		return new Response(responseBody, {
 			headers: { 'Content-Type': 'application/json' }
 		});
 	} catch (error) {
-				return new Response(JSON.stringify({ error: 'An error occurred. Error: ', error }), {
+		return new Response(JSON.stringify({ error: 'An error occurred. Error: ', error }), {
 			status: 500,
 			headers: {
 				'Content-Type': 'application/json'
 			}
 		});
+	} finally {
+		await db.close();
 	}
 };

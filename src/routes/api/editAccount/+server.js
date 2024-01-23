@@ -24,7 +24,6 @@ export const PUT = async ({ request }) => {
 			status: 'success',
 			message: `Account with ID ${id} updated successfully`
 		};
-
 		const responseBody = JSON.stringify(response);
 
 		return new Response(responseBody, {
@@ -37,5 +36,7 @@ export const PUT = async ({ request }) => {
 				'Content-Type': 'application/json'
 			}
 		});
+	} finally {
+		await db.close();
 	}
 };

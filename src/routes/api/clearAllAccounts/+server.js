@@ -5,10 +5,10 @@ export const DELETE = async () => {
 	try {
 		await db.query('DELETE FROM accounts').run();
 		db.close();
+
 		const response = {
 			status: 'success'
 		};
-
 		const responseBody = JSON.stringify(response);
 
 		return new Response(responseBody, {
@@ -21,5 +21,7 @@ export const DELETE = async () => {
 				'Content-Type': 'application/json'
 			}
 		});
+	} finally {
+		await db.close();
 	}
 };
