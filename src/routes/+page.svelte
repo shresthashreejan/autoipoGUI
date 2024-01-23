@@ -1,16 +1,13 @@
 <script>
 	import { goto } from '$app/navigation';
 	import { onMount } from 'svelte';
-	import Toast from '$lib/toast/toast.svelte';
+	import { showToastMessage } from '$lib/stores/toastStore';
 
 	export let data;
 	let fetchedAccounts;
 	let defaultAmount = 10;
 	let amount = defaultAmount;
 	let iteratorCount = 0;
-	let showToast = false;
-	let toastType;
-	let toastMessage;
 
 	onMount(async () => {
 		try {
@@ -40,60 +37,38 @@
 
 	async function screenshot() {
 		try {
-			const response = await Promise.race([
-				fetch('/api/apply', {
+			let response;
+			if (iteratorCount == 0) {
+				response = await Promise.race([
+					fetch('/api/apply', {
+						method: 'POST',
+						body: JSON.stringify({ fetchedAccounts })
+					}),
+					new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout')), 1000))
+				]);
+			} else {
+				response = await fetch('/api/apply', {
 					method: 'POST',
 					body: JSON.stringify({ fetchedAccounts })
-				}),
-				new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout')), 1000))
-			]);
+				});
+			}
 
 			if (!response.ok) {
 				throw new Error('Failed to apply');
 			}
 
+			if (response.ok) {
+				showToastMessage('success', 'screenshot');
+			}
+
 			iteratorCount = 0;
-			showToastMessage('screenshot', 'success');
 		} catch (error) {
 			iteratorCount++;
-			if (iteratorCount < 3) {
+			if (iteratorCount < 2) {
 				screenshot();
-			} else {
-				showToastMessage('screenshot', 'error');
 			}
 			console.error('Error ', error);
 		}
-	}
-
-	function showToastMessage(message, type) {
-		if (type == 'success') {
-			toastType = 'success';
-			switch (message) {
-				case 'screenshot':
-					toastMessage = 'Success';
-					showToastEvent();
-					break;
-				default:
-					break;
-			}
-		} else {
-			toastType = 'error';
-			switch (message) {
-				case 'screenshot':
-					toastMessage = 'Error';
-					showToastEvent();
-					break;
-				default:
-					break;
-			}
-		}
-	}
-
-	function showToastEvent() {
-		showToast = true;
-		setTimeout(() => {
-			showToast = false;
-		}, 5000);
 	}
 </script>
 
@@ -122,10 +97,6 @@
 		<button class="btn" onclick={setAmount}>Apply</button>
 	{/if}
 </div>
-
-{#if showToast == true}
-	<Toast {toastType} {toastMessage} />
-{/if}
 
 <style>
 	/* For WebKit browsers (Chrome, Safari) */

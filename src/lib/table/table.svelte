@@ -2,14 +2,11 @@
 	import Icon from '@iconify/svelte';
 	import deleteOutline from '@iconify/icons-mdi/delete-outline';
 	import creditCardEditOutline from '@iconify/icons-mdi/credit-card-edit-outline';
-	import Toast from '$lib/toast/toast.svelte';
+	import { showToastMessage } from '$lib/stores/toastStore';
 
 	export let fetchedAccounts;
 
 	let iteratorCount = 0;
-	let showToast = false;
-	let toastType;
-	let toastMessage;
 
 	async function deleteAccount(event) {
 		try {
@@ -62,13 +59,14 @@
 
 			iteratorCount = 0;
 			document.querySelector('#edit-account-modal').close();
-			showToastMessage('editAccount', 'success');
+			showToastMessage('success', 'editAccount');
 		} catch (error) {
 			iteratorCount++;
-			if (iteratorCount < 3) {
+			if (iteratorCount < 2) {
 				editAccount(event);
+			} else {
+				showToastMessage('error', 'editAccount');
 			}
-			showToastMessage('editAccount', 'error');
 			console.error('Error editing account:', error);
 		}
 	}
@@ -78,37 +76,6 @@
 		const id = event.target.id;
 		filterSelectedAccount(id);
 		document.querySelector('#edit-account-modal').showModal();
-	}
-
-	function showToastMessage(message, type) {
-		if (type == 'success') {
-			toastType = 'success';
-			switch (message) {
-				case 'editAccount':
-					toastMessage = 'Updated account.';
-					showToastEvent();
-					break;
-				default:
-					break;
-			}
-		} else {
-			toastType = 'error';
-			switch (message) {
-				case 'screenshot':
-					toastMessage = 'Error updating account.';
-					showToastEvent();
-					break;
-				default:
-					break;
-			}
-		}
-	}
-
-	function showToastEvent() {
-		showToast = true;
-		setTimeout(() => {
-			showToast = false;
-		}, 5000);
 	}
 </script>
 
@@ -244,10 +211,6 @@
 		{/if}
 	</div>
 </dialog>
-
-{#if showToast == true}
-	<Toast {toastType} {toastMessage} />
-{/if}
 
 <style>
 	/* For WebKit browsers (Chrome, Safari) */

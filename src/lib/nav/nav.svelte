@@ -5,24 +5,24 @@
 	import cogOutline from '@iconify/icons-mdi/cog-outline';
 </script>
 
-<div class="fixed top-0 left-0 h-screen w-16 flex flex-col justify-center mx-4 z-50">
+<div class="h-screen w-screen md:w-16 flex md:flex-col justify-center items-end mx-4 z-50">
 	<nav>
-		<ul>
-			<a href="/"
+		<ul class="flex md:flex-col">
+			<a class="mx-4 md:m-0" href="/"
 				><li class="tooltip tooltip-right my-6" data-tip="Apply for new IPOs">
 					<button class="btn btn-square">
 						<Icon icon={databaseEditOutline} height="30" />
 					</button>
 				</li></a
 			>
-			<a href="/results">
+			<a class="mx-4 md:m-0" href="/results">
 				<li class="tooltip tooltip-right my-6" data-tip="Check your IPO results">
 					<button class="btn btn-square">
 						<Icon icon={fileDocumentCheckOutline} height="30" />
 					</button>
 				</li>
 			</a>
-			<a href="/settings">
+			<a class="mx-4 md:m-0" href="/settings">
 				<li class="tooltip tooltip-right my-6" data-tip="Settings">
 					<button class="btn btn-square">
 						<Icon icon={cogOutline} height="30" />

@@ -21,7 +21,8 @@ export const POST = async ({ request }) => {
 			headers: { 'Content-Type': 'application/json' }
 		});
 	} catch (error) {
-				return new Response(JSON.stringify({ status: 'error', message: error }), {
+		console.log(error);
+		return new Response(JSON.stringify({ status: 'error', message: error }), {
 			headers: { 'Content-Type': 'application/json' },
 			status: 500
 		});
@@ -59,13 +60,13 @@ const login = async (account) => {
 
 	const signIn = await page.$('.btn.sign-in');
 	if (signIn) {
-		await signIn.click();
+	await signIn.click();
 	}
 
 	await page.waitForSelector('.msi-asba');
 	const asba = await page.$('.msi-asba');
 	if (asba) {
-		await asba.click();
+	await asba.click();
 	}
 
 	await page.screenshot({ path: `${account.username}_debug.png` });
