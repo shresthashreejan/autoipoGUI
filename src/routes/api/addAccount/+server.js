@@ -1,6 +1,7 @@
 import { Database } from 'bun:sqlite';
 
 export const POST = async ({ request }) => {
+	const db = await new Database('accounts.sqlite');
 	try {
 		const data = await request.formData();
 		const username = data.get('username');
@@ -10,8 +11,6 @@ export const POST = async ({ request }) => {
 		const crn = data.get('crn');
 		const boid = data.get('boid');
 		const dp = data.get('dp');
-
-		const db = await new Database('accounts.sqlite');
 
 		await db
 			.query(
