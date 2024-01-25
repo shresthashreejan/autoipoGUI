@@ -167,8 +167,9 @@
 		<div class="flex justify-center">
 			<h2 class="text-2xl font-bold mb-4">Saved accounts</h2>
 		</div>
-
-		<Table {fetchedAccounts} />
+		{#if fetchedAccounts}
+			<Table {fetchedAccounts} />
+		{/if}
 	</div>
 </dialog>
 

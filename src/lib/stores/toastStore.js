@@ -16,11 +16,11 @@ export const showToastMessage = (type, message) => {
 			showToastEvent(toastType, toastMessage);
 			break;
 		case 'clearAllAccounts':
-			toastMessage = type === 'success' ? 'Cleared all accounts.' : 'Error clearing all accounts.';
+			toastMessage = type === 'success' ? 'Cleared all accounts.' : 'Error clearing accounts.';
 			showToastEvent(toastType, toastMessage);
 			break;
 		case 'fetchAccounts':
-			toastMessage = type === 'success' ? 'Fetched all accounts.' : 'Error fetching all accounts.';
+			toastMessage = type === 'success' ? 'Fetched accounts.' : 'Error fetching accounts.';
 			showToastEvent(toastType, toastMessage);
 			break;
 		case 'addAccount':

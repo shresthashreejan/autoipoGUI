@@ -5,7 +5,7 @@ export const POST = async ({ request }) => {
 		const requestBody = await request.json();
 		const delay = async (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 		for (const account of requestBody.fetchedAccounts) {
-			await login(account);
+			await apply(account);
 			await delay(5000);
 		}
 
@@ -22,13 +22,13 @@ export const POST = async ({ request }) => {
 			headers: { 'Content-Type': 'application/json' },
 			status: 500
 		});
-	} finally {
-		await db.close();
 	}
 };
 
-const login = async (account) => {
+const apply = async (account) => {
+	const browsers = [];
 	const browser = await puppeteer.launch();
+	browsers.push(browser);
 	const page = await browser.newPage();
 	await page.setUserAgent(
 		'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36'
@@ -66,6 +66,8 @@ const login = async (account) => {
 		await asba.click();
 	}
 
+	await page.waitForSelector('.nav');
+
 	await page.screenshot({ path: `${account.username}_debug.png` });
-	await browser.close();
+	await Promise.all(browsers.map((browser) => browser.close()));
 };
