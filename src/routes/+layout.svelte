@@ -46,7 +46,7 @@
 
 <AnimateContainer>
 	<div
-		class="ipo-slider whitespace-nowrap overflow-hidden lg:mt-10 absolute lg:flex hidden bg-gray-700 text-white py-4 scroll-smooth"
+		class="ipo-slider whitespace-nowrap overflow-hidden lg:mt-10 absolute lg:flex hidden py-4 scroll-smooth"
 	>
 		{#each headerList as header}
 			<div class="ipo-header inline-block lg:text-7xl uppercase italic">
@@ -63,6 +63,10 @@
 			<div class="main-section"><slot /></div>
 		</div>
 	</AnimateContainer>
+</div>
+
+<div class="absolute flex bottom-0 w-screen justify-center">
+	<h1>Made in Nepal</h1>
 </div>
 
 {#if $toastStore.showToast}

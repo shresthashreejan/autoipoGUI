@@ -9,7 +9,7 @@
 			<span class=" text-white">{toastMessage}</span>
 		</div>
 	{:else}
-		<div class="alert bg-red-400">
+		<div class="alert bg-red-500">
 			<span class=" text-white">{toastMessage}</span>
 		</div>
 	{/if}

@@ -73,7 +73,6 @@
 </script>
 
 <div class="h-screen flex flex-col justify-center items-center gap-4">
-	<h1>Apply IPO</h1>
 	<div class="flex gap-2">
 		<input
 			type="number"
@@ -85,7 +84,7 @@
 			class="tooltip flex justify-center items-center"
 			data-tip="Leave empty for minimum amount."
 		>
-			<span class=" bg-slate-600 w-6 rounded-full text-white">i</span>
+			<span class="bg-neutral w-6 rounded-full text-white">i</span>
 		</div>
 	</div>
 	{#if !fetchedAccounts}

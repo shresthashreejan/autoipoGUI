@@ -78,8 +78,7 @@
 </script>
 
 <div class="h-screen flex flex-col justify-center items-center gap-4">
-	<h1>Settings</h1>
-	<div class="flex gap-4">
+	<div class="flex flex-col gap-4">
 		<button class="btn" onclick={openAddAccModal}>Add accounts</button>
 		<button class="btn" onclick={openViewAccModal}>View accounts</button>
 		<button class="btn" onclick={clearAllAccounts}>Clear all accounts</button>
@@ -95,7 +94,7 @@
 
 		<form onsubmit={addAccount} method="POST">
 			<div class="mb-4">
-				<label for="username" class="block text-sm font-medium text-gray-600">Username</label>
+				<label for="username" class="block text-sm font-medium">Username</label>
 				<input
 					type="text"
 					id="username"
@@ -105,7 +104,7 @@
 				/>
 			</div>
 			<div class="mb-4">
-				<label for="password" class="block text-sm font-medium text-gray-600">Password</label>
+				<label for="password" class="block text-sm font-medium">Password</label>
 				<input
 					type="password"
 					id="password"
@@ -115,7 +114,7 @@
 				/>
 			</div>
 			<div class="mb-4">
-				<label for="client_id" class="block text-sm font-medium text-gray-600">Client ID</label>
+				<label for="client_id" class="block text-sm font-medium">Client ID</label>
 				<input
 					type="number"
 					id="client_id"
@@ -125,7 +124,7 @@
 				/>
 			</div>
 			<div class="mb-4">
-				<label for="demat_no" class="block text-sm font-medium text-gray-600">Demat No.</label>
+				<label for="demat_no" class="block text-sm font-medium">Demat No.</label>
 				<input
 					type="text"
 					id="demat_no"
@@ -135,11 +134,11 @@
 				/>
 			</div>
 			<div class="mb-4">
-				<label for="crn" class="block text-sm font-medium text-gray-600">CRN</label>
+				<label for="crn" class="block text-sm font-medium">CRN</label>
 				<input type="text" id="crn" name="crn" class="mt-1 p-2 w-full border rounded-md" required />
 			</div>
 			<div class="mb-4">
-				<label for="boid" class="block text-sm font-medium text-gray-600">BOID</label>
+				<label for="boid" class="block text-sm font-medium">BOID</label>
 				<input
 					type="number"
 					id="boid"
@@ -149,9 +148,7 @@
 				/>
 			</div>
 			<div class="mb-4">
-				<label for="dp" class="block text-sm font-medium text-gray-600"
-					>Depository Participants</label
-				>
+				<label for="dp" class="block text-sm font-medium">Depository Participants</label>
 				<input type="number" id="dp" name="dp" class="mt-1 p-2 w-full border rounded-md" required />
 			</div>
 			<button type="submit" class="btn">Save</button>

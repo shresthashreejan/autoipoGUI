@@ -96,7 +96,7 @@
 		</thead>
 		<tbody>
 			{#each fetchedAccounts as account}
-				<tr class="hover:bg-gray-50 transition-all"
+				<tr
 					><td>{account.id}</td>
 					<td>{account.username}</td>
 					<td>{account.password}</td>
@@ -135,7 +135,7 @@
 		{#if fetchedAccounts}
 			<form onsubmit={editAccount} method="PUT" id={fetchedAccounts[0].id}>
 				<div class="mb-4">
-					<label for="username" class="block text-sm font-medium text-gray-600">Username</label>
+					<label for="username" class="block text-sm font-medium ">Username</label>
 					<input
 						type="text"
 						name="username"
@@ -145,7 +145,7 @@
 					/>
 				</div>
 				<div class="mb-4">
-					<label for="password" class="block text-sm font-medium text-gray-600">Password</label>
+					<label for="password" class="block text-sm font-medium ">Password</label>
 					<input
 						type="password"
 						name="password"
@@ -155,7 +155,7 @@
 					/>
 				</div>
 				<div class="mb-4">
-					<label for="client_id" class="block text-sm font-medium text-gray-600">Client ID</label>
+					<label for="client_id" class="block text-sm font-medium ">Client ID</label>
 					<input
 						type="number"
 						name="client_id"
@@ -165,7 +165,7 @@
 					/>
 				</div>
 				<div class="mb-4">
-					<label for="demat_no" class="block text-sm font-medium text-gray-600">Demat No.</label>
+					<label for="demat_no" class="block text-sm font-medium ">Demat No.</label>
 					<input
 						type="text"
 						name="demat_no"
@@ -175,7 +175,7 @@
 					/>
 				</div>
 				<div class="mb-4">
-					<label for="crn" class="block text-sm font-medium text-gray-600">CRN</label>
+					<label for="crn" class="block text-sm font-medium ">CRN</label>
 					<input
 						type="text"
 						name="crn"
@@ -185,7 +185,7 @@
 					/>
 				</div>
 				<div class="mb-4">
-					<label for="boid" class="block text-sm font-medium text-gray-600">BOID</label>
+					<label for="boid" class="block text-sm font-medium ">BOID</label>
 					<input
 						type="number"
 						name="boid"
@@ -195,7 +195,7 @@
 					/>
 				</div>
 				<div class="mb-4">
-					<label for="dp" class="block text-sm font-medium text-gray-600"
+					<label for="dp" class="block text-sm font-medium "
 						>Depository Participants</label
 					>
 					<input
